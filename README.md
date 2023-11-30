@@ -10,6 +10,7 @@ Etapas:
 6) O nome da imagem(tag) tem que ser meu-app-java:1
 7) Colocar ela para rodar no docker(usando o comando docker run)
 8) Ver a mensagem printada no log do docker
+9) Instalar o localstack na maquina
 ______________________________________
 ## Crie um arquivo .jar
 Criando um projetinho java que imprime 'Eu estou executando de dentro do Docker!'
@@ -96,5 +97,31 @@ docker logs <ID_do_Contêiner>
 ```
 Substitua <ID_do_Contêiner> pelo ID real do seu contêiner. Isso mostrará a saída do log do aplicativo Java em execução no contêiner.
 '![image](https://github.com/IrisRPerrorni/StudyDocker/assets/133882090/fc9c40aa-e24e-4a2f-8a38-df09b888eca8)
+_________________________________________________________________________________________________________
+## Localstack na maquina 
+Criei um arquivo docker-compose.yaml com as seguintes propriedades
 
+version: "3.8"
+```bash
+services:
+  localstack:
+    container_name: "${LOCALSTACK_DOCKER_NAME-localstack-main}"
+    image: localstack/localstack
+    ports:
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+    environment:
+      - DEBUG=${DEBUG-}
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+```
+No prompt de comando digite : 
+```bash
+docker-compose up
+```
+e ai já está a localstack na maquina 
+![image](https://github.com/IrisRPerrorni/StudyDocker/assets/133882090/16104cc1-5742-444f-86e0-f96f43b7aa8d)
+![image](https://github.com/IrisRPerrorni/StudyDocker/assets/133882090/0f9d8625-b2bf-486b-b0f3-d0f296666ee9)
 
